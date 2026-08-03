@@ -16,7 +16,9 @@ import com.example.findinglogs.model.util.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainViewModel extends AndroidViewModel {
 
@@ -59,13 +61,15 @@ public class MainViewModel extends AndroidViewModel {
         HashMap<String, String> localizations = mRepository.getLocalizations();
         final int totalLocalizations = localizations.size();
         final int[] finishedCount = {0};
-        final List<Weather> updatedList = new ArrayList<>();
+        final Map<String, Weather> weatherMap = new LinkedHashMap<>();
 
         for (String latlon : localizations.values()) {
             mRepository.retrieveForecast(latlon, new WeatherCallback() {
                 @Override
                 public void onSuccess(Weather result) {
-                    updatedList.add(result);
+                    if (result != null && result.getName() != null) {
+                        weatherMap.put(result.getName(), result);
+                    }
                     checkCompletion();
                 }
 
@@ -82,7 +86,7 @@ public class MainViewModel extends AndroidViewModel {
                     }
                     finishedCount[0]++;
                     if (finishedCount[0] == totalLocalizations) {
-                        _weatherList.setValue(updatedList);
+                        _weatherList.setValue(new ArrayList<>(weatherMap.values()));
                         handler.postDelayed(fetchRunnable, FETCH_INTERVAL);
                     }
                 }
