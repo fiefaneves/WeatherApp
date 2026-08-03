@@ -26,6 +26,8 @@ public class MainViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Weather>> _weatherList = new MutableLiveData<>(new ArrayList<>());
     private final LiveData<List<Weather>> weatherList = _weatherList;
 
+    private int currentSessionId = 0;
+
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable fetchRunnable = this::fetchAllForecasts;
 
@@ -41,28 +43,48 @@ public class MainViewModel extends AndroidViewModel {
 
     private void startFetching() {
         fetchAllForecasts();
-        handler.postDelayed(fetchRunnable, FETCH_INTERVAL);
+    }
+
+    public void refreshData() {
+        if (Logger.ISLOGABLE) Logger.d(TAG, "refreshData()");
+        handler.removeCallbacks(fetchRunnable);
+        fetchAllForecasts();
     }
 
     private void fetchAllForecasts() {
         if (Logger.ISLOGABLE) Logger.d(TAG, "fetchAllForecasts()");
+        currentSessionId++;
+        final int sessionId = currentSessionId;
+
         HashMap<String, String> localizations = mRepository.getLocalizations();
-        List<Weather> updatedList = new ArrayList<>();
+        final int totalLocalizations = localizations.size();
+        final int[] finishedCount = {0};
+        final List<Weather> updatedList = new ArrayList<>();
 
         for (String latlon : localizations.values()) {
             mRepository.retrieveForecast(latlon, new WeatherCallback() {
                 @Override
                 public void onSuccess(Weather result) {
                     updatedList.add(result);
-                    if (updatedList.size() == localizations.size()) {
-                        _weatherList.setValue(updatedList);
-                        handler.postDelayed(fetchRunnable, FETCH_INTERVAL);
-                    }
+                    checkCompletion();
                 }
 
                 @Override
                 public void onFailure(String error) {
-                    handler.postDelayed(fetchRunnable, FETCH_INTERVAL);
+                    if (Logger.ISLOGABLE) Logger.w(TAG, "onFailure: " + error);
+                    checkCompletion();
+                }
+
+                private void checkCompletion() {
+                    if (sessionId != currentSessionId) {
+                        if (Logger.ISLOGABLE) Logger.d(TAG, "checkCompletion: Stale session, ignoring.");
+                        return;
+                    }
+                    finishedCount[0]++;
+                    if (finishedCount[0] == totalLocalizations) {
+                        _weatherList.setValue(updatedList);
+                        handler.postDelayed(fetchRunnable, FETCH_INTERVAL);
+                    }
                 }
             });
         }
