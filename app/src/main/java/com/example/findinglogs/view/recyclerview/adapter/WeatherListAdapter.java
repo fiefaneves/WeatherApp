@@ -58,6 +58,12 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
 
         public void holdWeather(Weather weather, Context context) {
             switch (weather.getWeather().get(0).getIcon()){
+                case "01d":
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_clear_sky));
+                    break;
+                case "01n":
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_clear_sky_dark));
+                    break;
                 case "02d":
                     cardView.setCardBackgroundColor(context.getColor(R.color.weather_few_clouds));
                     break;
@@ -77,9 +83,27 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
                     cardView.setCardBackgroundColor(context.getColor(R.color.weather_scattered_clouds_dark));
                     break;
                 case "09d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_fog));
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_heavy_rain));
                     break;
                 case "09n":
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_heavy_rain_dark));
+                    break;
+                case "10d":
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_light_rain));
+                    break;
+                case "10n":
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_light_rain_dark));
+                    break;
+                case "11d":
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_thunderstorm));
+                    break;
+                case "11n":
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_thunderstorm_dark));
+                    break;
+                case "50d":
+                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_fog));
+                    break;
+                case "50n":
                     cardView.setCardBackgroundColor(context.getColor(R.color.weather_fog_dark));
                     break;
                 default:

@@ -21,7 +21,7 @@ The app is functional, but there are still some improvements and bug fixes to be
 `WEATHER_API_KEY= <your-api-key-here>`
 - [x] 📊 Fetch and display **pressure** data from the API
 - [x] 🔄 Implement data refresh on **Refresh** button click
-- [ ] 🎨 Fix broken **weather icons**
+- [x] 🎨 Fix broken **weather icons**
 - [ ] 🧹 Eliminate **duplicate data** issues
 
 ---
