@@ -22,6 +22,7 @@ All tasks proposed in the original roadmap have been completed, along with struc
 - [x] **Race Condition Protection**: Session-based control for concurrent network calls.
 - [x] **Temperature Accuracy**: Corrected Kelvin to Celsius conversion constant.
 - [x] **Strict Ordering**: Guaranteed consistent city sequence across updates.
+- [x] **Null Safety**: Added protection against potential crashes from malformed API responses.
 - [x] **Unit Testing**: Implemented a comprehensive test suite for the core ViewModel logic.
 
 ---

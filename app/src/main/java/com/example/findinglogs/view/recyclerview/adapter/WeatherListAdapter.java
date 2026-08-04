@@ -57,57 +57,66 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         }
 
         public void holdWeather(Weather weather, Context context) {
-            switch (weather.getWeather().get(0).getIcon()){
-                case "01d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_clear_sky));
-                    break;
-                case "01n":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_clear_sky_dark));
-                    break;
-                case "02d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_few_clouds));
-                    break;
-                case "02n":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_few_clouds_dark));
-                    break;
-                case "03d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_cloudy));
-                    break;
-                case "03n":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_cloudy_dark));
-                    break;
-                case "04d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_scattered_clouds));
-                    break;
-                case "04n":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_scattered_clouds_dark));
-                    break;
-                case "09d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_heavy_rain));
-                    break;
-                case "09n":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_heavy_rain_dark));
-                    break;
-                case "10d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_light_rain));
-                    break;
-                case "10n":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_light_rain_dark));
-                    break;
-                case "11d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_thunderstorm));
-                    break;
-                case "11n":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_thunderstorm_dark));
-                    break;
-                case "50d":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_fog));
-                    break;
-                case "50n":
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_fog_dark));
-                    break;
-                default:
-                    cardView.setCardBackgroundColor(context.getColor(R.color.weather_few_clouds));
+            String icon = null;
+            if (weather.getWeather() != null && !weather.getWeather().isEmpty()) {
+                icon = weather.getWeather().get(0).getIcon();
+            }
+
+            if (icon != null) {
+                switch (icon) {
+                    case "01d":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_clear_sky));
+                        break;
+                    case "01n":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_clear_sky_dark));
+                        break;
+                    case "02d":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_few_clouds));
+                        break;
+                    case "02n":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_few_clouds_dark));
+                        break;
+                    case "03d":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_cloudy));
+                        break;
+                    case "03n":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_cloudy_dark));
+                        break;
+                    case "04d":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_scattered_clouds));
+                        break;
+                    case "04n":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_scattered_clouds_dark));
+                        break;
+                    case "09d":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_heavy_rain));
+                        break;
+                    case "09n":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_heavy_rain_dark));
+                        break;
+                    case "10d":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_light_rain));
+                        break;
+                    case "10n":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_light_rain_dark));
+                        break;
+                    case "11d":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_thunderstorm));
+                        break;
+                    case "11n":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_thunderstorm_dark));
+                        break;
+                    case "50d":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_fog));
+                        break;
+                    case "50n":
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_fog_dark));
+                        break;
+                    default:
+                        cardView.setCardBackgroundColor(context.getColor(R.color.weather_few_clouds));
+                }
+            } else {
+                cardView.setCardBackgroundColor(context.getColor(R.color.weather_few_clouds));
             }
 
             name.setText(weather.getName());
@@ -124,7 +133,7 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
             pressure.setText(pressure_value);
             String humidity_value = "Umidade: " + weather.getMain().getHumidity() + "%";
             humidity.setText(humidity_value);
-            Drawable resDrawIcon = Utils.getDrawable(weather.getWeather().get(0).getIcon(), context);
+            Drawable resDrawIcon = Utils.getDrawable(icon, context);
             imageView.setImageDrawable(resDrawIcon);
         }
     }
