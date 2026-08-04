@@ -45,7 +45,7 @@ public class Utils {
     }
 
     public static String getCelsiusTemperatureFromKevin(float temp) {
-        float tempKelvinRef = 275.15f;
+        float tempKelvinRef = 273.15f;
         float convertToCelsius = temp - tempKelvinRef;
         NumberFormat fmt = DecimalFormat.getNumberInstance(new Locale("pt", "BR"));
         fmt.setMaximumFractionDigits(1);
