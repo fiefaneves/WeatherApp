@@ -8,7 +8,8 @@ import com.example.findinglogs.model.repo.remote.WeatherManager;
 import com.example.findinglogs.model.repo.remote.api.WeatherCallback;
 import com.example.findinglogs.model.util.Logger;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Repository {
     private static final String TAG = Repository.class.getSimpleName();
@@ -37,8 +38,8 @@ public class Repository {
         return sharedPrefManagerManager.readString(key);
     }
 
-    public HashMap<String, String> getLocalizations() {
-        HashMap<String, String> localizations = new HashMap<>();
+    public Map<String, String> getLocalizations() {
+        Map<String, String> localizations = new LinkedHashMap<>();
         localizations.put("1", "-8.05428,-34.8813");  // Recife
         localizations.put("2", "-9.39416,-40.5096");  // Petrolina
         localizations.put("3", "-8.284547,-35.969863"); // Caruaru

@@ -20,6 +20,8 @@ All tasks proposed in the original roadmap have been completed, along with struc
 - [x] **Duplicate Elimination**: Unique location repository and logic-level deduplication.
 - [x] **Startup Robustness**: Resilient loading that handles partial network failures.
 - [x] **Race Condition Protection**: Session-based control for concurrent network calls.
+- [x] **Temperature Accuracy**: Corrected Kelvin to Celsius conversion constant.
+- [x] **Strict Ordering**: Guaranteed consistent city sequence across updates.
 - [x] **Unit Testing**: Implemented a comprehensive test suite for the core ViewModel logic.
 
 ---
@@ -35,13 +37,15 @@ To prevent **Race Conditions**, a "Session ID" logic was implemented.
 - **The Problem**: The original code used an "all-or-nothing" approach—if one city failed to load, the entire screen remained empty.
 - **The Solution**: Implemented a **completion counter** that tracks how many requests have finished (success or failure). The UI is updated as soon as all attempts are finalized. This provides a much better UX, as the user can see available data even if one specific city is experiencing temporary API issues.
 
-### 3. Data Integrity via `LinkedHashMap`
-- **The Problem**: Potential for duplicate entries if coordinates are redundant or if the API returns inconsistent results.
-- **The Solution**: Results are collected in a `LinkedHashMap` using the city name as the key.
-    - **Deduplication**: Automatically overwrites any duplicate city entries.
-    - **Order Preservation**: Unlike a standard `HashMap`, it maintains the insertion order, ensuring a consistent list sequence for the user.
+### 3. Deterministic Positional Ordering
+- **The Problem**: In an asynchronous environment, the order of cities in the list would change based on which network request finished first, causing a "jumping" UI effect.
+- **The Solution**: Implemented a deterministic ordering logic that maps each result to its original key in the repository. Regardless of the network latency for each city, the final list is reconstructed following the strict sequence defined by the data source.
+- **Benefit**: Provides a stable and predictable interface, improving the overall perceived quality and professionalism of the application.
 
-### 4. Cognitive Load Reduction through Dynamic Theming
+### 4. Data Integrity & Deduplication
+- **The Solution**: Results are validated and filtered during the list reconstruction process. By tracking city names already added to the final list, the app ensures that no duplicate entries are displayed, even in case of data redundancy from the API.
+
+### 5. Cognitive Load Reduction through Dynamic Theming
 - **The Solution**: Implemented a dynamic coloring system where the card background reflects the weather condition and the day/night cycle.
 - **The Why**: This allows users to perceive the general weather state (clear, rainy, stormy) and time of day instantly through color recognition, even before reading the numerical data or looking at the icon.
 
@@ -53,7 +57,7 @@ A unit testing suite was implemented to validate the core business logic and ens
 
 ### What is tested:
 - **Partial Success Logic**: Validates that the app correctly displays available data even when some network requests fail.
-- **Data Deduplication**: Ensures that the `LinkedHashMap` logic correctly handles and eliminates duplicate city data.
+- **Data Deduplication & Ordering**: Ensures that the logic correctly handles duplicate city data and maintains the strict positional sequence regardless of network response order.
 - **Race Condition Protection**: A complex test scenario that simulates multiple rapid fetch requests and verifies that only the latest session successfully updates the UI, while stale sessions are correctly ignored.
 
 ---

@@ -16,7 +16,6 @@ import com.example.findinglogs.model.util.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,17 +63,20 @@ public class MainViewModel extends AndroidViewModel {
         currentSessionId++;
         final int sessionId = currentSessionId;
 
-        HashMap<String, String> localizations = mRepository.getLocalizations();
+        final Map<String, String> localizations = mRepository.getLocalizations();
         final int totalLocalizations = localizations.size();
         final int[] finishedCount = {0};
-        final Map<String, Weather> weatherMap = new LinkedHashMap<>();
+        final Map<String, Weather> weatherResults = new HashMap<>();
 
-        for (String latlon : localizations.values()) {
+        for (Map.Entry<String, String> entry : localizations.entrySet()) {
+            final String key = entry.getKey();
+            String latlon = entry.getValue();
+
             mRepository.retrieveForecast(latlon, new WeatherCallback() {
                 @Override
                 public void onSuccess(Weather result) {
-                    if (result != null && result.getName() != null) {
-                        weatherMap.put(result.getName(), result);
+                    synchronized (weatherResults) {
+                        weatherResults.put(key, result);
                     }
                     checkCompletion();
                 }
@@ -87,12 +89,21 @@ public class MainViewModel extends AndroidViewModel {
 
                 private void checkCompletion() {
                     if (sessionId != currentSessionId) {
-                        if (Logger.ISLOGABLE) Logger.d(TAG, "checkCompletion: Stale session, ignoring.");
                         return;
                     }
                     finishedCount[0]++;
                     if (finishedCount[0] == totalLocalizations) {
-                        _weatherList.setValue(new ArrayList<>(weatherMap.values()));
+                        List<Weather> orderedList = new ArrayList<>();
+                        List<String> cityNames = new ArrayList<>();
+
+                        for (String k : localizations.keySet()) {
+                            Weather w = weatherResults.get(k);
+                            if (w != null && w.getName() != null && !cityNames.contains(w.getName())) {
+                                orderedList.add(w);
+                                cityNames.add(w.getName());
+                            }
+                        }
+                        _weatherList.setValue(orderedList);
                         handler.postDelayed(fetchRunnable, FETCH_INTERVAL);
                     }
                 }

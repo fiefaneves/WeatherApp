@@ -94,6 +94,35 @@ public class MainViewModelTest {
     }
 
     @Test
+    public void testFetchAllForecasts_StrictOrder() {
+        final WeatherCallback[] callbacks = new WeatherCallback[2];
+        doAnswer(invocation -> {
+            callbacks[0] = invocation.getArgument(1);
+            return null;
+        }).when(repository).retrieveForecast(eq("lat1,lon1"), any(WeatherCallback.class));
+
+        doAnswer(invocation -> {
+            callbacks[1] = invocation.getArgument(1);
+            return null;
+        }).when(repository).retrieveForecast(eq("lat2,lon2"), any(WeatherCallback.class));
+
+        viewModel = new MainViewModel(application, repository, handler);
+
+        Weather weather2 = new Weather();
+        weather2.setName("City 2");
+        callbacks[1].onSuccess(weather2);
+
+        Weather weather1 = new Weather();
+        weather1.setName("City 1");
+        callbacks[0].onSuccess(weather1);
+
+        List<Weather> result = viewModel.getWeatherList().getValue();
+        assertEquals(2, result.size());
+        assertEquals("City 1", result.get(0).getName());
+        assertEquals("City 2", result.get(1).getName());
+    }
+
+    @Test
     public void testFetchAllForecasts_RaceCondition() {
         ArgumentCaptor<WeatherCallback> callbackCaptor = ArgumentCaptor.forClass(WeatherCallback.class);
 
