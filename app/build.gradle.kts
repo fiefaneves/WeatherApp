@@ -41,6 +41,9 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -56,6 +59,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.core.testing)
 
     implementation(libs.converter.scalars)
     implementation(libs.retrofit)

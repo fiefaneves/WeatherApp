@@ -20,6 +20,7 @@ All tasks proposed in the original roadmap have been completed, along with struc
 - [x] **Duplicate Elimination**: Unique location repository and logic-level deduplication.
 - [x] **Startup Robustness**: Resilient loading that handles partial network failures.
 - [x] **Race Condition Protection**: Session-based control for concurrent network calls.
+- [x] **Unit Testing**: Implemented a comprehensive test suite for the core ViewModel logic.
 
 ---
 
@@ -46,6 +47,17 @@ To prevent **Race Conditions**, a "Session ID" logic was implemented.
 
 ---
 
+## 🧪 Testing
+
+A unit testing suite was implemented to validate the core business logic and ensure the reliability of the synchronization and concurrency mechanisms.
+
+### What is tested:
+- **Partial Success Logic**: Validates that the app correctly displays available data even when some network requests fail.
+- **Data Deduplication**: Ensures that the `LinkedHashMap` logic correctly handles and eliminates duplicate city data.
+- **Race Condition Protection**: A complex test scenario that simulates multiple rapid fetch requests and verifies that only the latest session successfully updates the UI, while stale sessions are correctly ignored.
+
+---
+
 ## ⚙️ Configuration and Execution
 
 ### Prerequisites:
@@ -65,6 +77,6 @@ To prevent **Race Conditions**, a "Session ID" logic was implemented.
 
 1. **Local Persistence**: Implementing **Room** would allow the application to cache weather data and provide a better offline-first experience.
 2. **Dependency Injection**: Introducing **Hilt** would improve dependency management and further decouple the application components, making the code easier to maintain and test.
-3. **Unit & UI Testing**: Adding **JUnit, Mockito, and UI tests** would increase confidence in the ViewModel logic, data synchronization, refresh behavior, and main user flows.
+3. **Expanded Test Suite**: Adding **UI tests (Espresso)** and increasing the coverage of unit tests to include edge cases in the Repository and Network layers.
 4. **Improved Error Handling**: Providing more granular error states and retry actions for individual cities would improve the user experience when only part of the network requests fail.
-5. **Repository Abstraction**: Introducing a dedicated repository layer would further separate data access from presentation logic, making it easier to introduce caching, alternative data sources, or additional APIs in the future.
+5. **Repository Abstraction**: Introducing a dedicated repository layer with interfaces would further separate data access from presentation logic, making it easier to introduce caching or alternative data sources.

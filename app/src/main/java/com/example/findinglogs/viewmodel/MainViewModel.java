@@ -30,12 +30,18 @@ public class MainViewModel extends AndroidViewModel {
 
     private int currentSessionId = 0;
 
-    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler;
     private final Runnable fetchRunnable = this::fetchAllForecasts;
 
     public MainViewModel(Application application) {
+        this(application, new Repository(application), new Handler(Looper.getMainLooper()));
+    }
+
+    // Package-private constructor for testing
+    MainViewModel(Application application, Repository repository, Handler handler) {
         super(application);
-        mRepository = new Repository(application);
+        this.mRepository = repository;
+        this.handler = handler;
         startFetching();
     }
 
