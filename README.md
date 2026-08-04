@@ -3,8 +3,8 @@
 This repository contains the solution for the Weather App technical challenge. The application has been refactored and fixed to display real-time weather information for various cities using the [OpenWeather API](https://openweathermap.org/api).
 
 <p align="center">
-  <img src="screenshots/home_screen.png" alt="Home Screen" height="500">
-  <img src="screenshots/screen_recording.gif" alt="Refresh Demo" height="500">
+  <img src="screenshots/home_screen_2.png" alt="Home Screen" height="500">
+  <img src="screenshots/refresh_recording.gif" alt="Refresh Demo" height="500">
 </p>
 
 ---
